@@ -1,5 +1,9 @@
 ###### Hashicorp_Vault #############
 
+<img width="1066" alt="image" src="https://github.com/user-attachments/assets/8c41a3ff-fe63-4036-94b2-2359d3a48d82" />
+
+
+
 (Configuring Vault on EKS)
 
 Step 1:
