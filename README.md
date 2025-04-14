@@ -123,10 +123,104 @@ Login with the root token on the vault-0 pod
 ```
 kubectl exec vault-0 -- vault login $CLUSTER_ROOT_TOKEN
 ```
+<img width="923" alt="image" src="https://github.com/user-attachments/assets/9ae050c3-ed7a-455a-8663-b13f7e3530b6" />
 
 
+Step 12:
+List all the nodes within the Vault cluster for the vault-0 pod
+```
+kubectl exec vault-0 -- vault operator raft list-peers
+```
+
+<img width="859" alt="image" src="https://github.com/user-attachments/assets/6a038a5c-ca2b-457e-8a45-3c0269d56a80" />
 
 
+Step 13:
+
+Join the Vault server on vault-1 to the Vault cluster
+
+```
+kubectl exec vault-1 -- vault operator raft join http://vault-0.vault-internal:8200
+```
+
+This Vault server joins the cluster sealed. To unseal the Vault server requires the same unseal key, VAULT_UNSEAL_KEY, provided to the first Vault server.
+
+Step 14:
+
+Unseal the Vault server on vault-1 with the unseal key
+```
+kubectl exec vault-1 -- vault operator unseal $VAULT_UNSEAL_KEY
+```
+The Vault server on vault-1 is now a functional node within the Vault cluster.
 
 
+Step 15:
 
+Join the Vault server on vault-2 to the Vault cluster.
+```
+kubectl exec vault-2 -- vault operator raft join http://vault-0.vault-internal:8200
+```
+And Unseal the Vault server on vault-2 with the unseal key.
+
+```
+kubectl exec vault-2 -- vault operator unseal $VAULT_UNSEAL_KEY
+```
+The Vault server on vault-2 is now a functional node within the Vault cluster.
+
+Step 16: 
+
+Now let's List all the nodes within the Vault cluster for the vault-0 pod.
+```
+kubectl exec vault-0 -- vault operator raft list-peers
+```
+
+<img width="1036" alt="image" src="https://github.com/user-attachments/assets/86eea1f9-40d1-4712-95aa-690e8778ed51" />
+
+Step 17:
+
+Get all the pods within the vault namespace.
+```
+kubectl get pods
+```
+vault-0, vault-1, and vault-2 pods report that they are Running and ready (1/1)
+
+
+<img width="1024" alt="image" src="https://github.com/user-attachments/assets/0855d393-4611-4a96-b275-88120422ccb0" />
+
+
+Step 18:
+
+Let's expose Vault UI with Ingress 
+
+```
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vault-ingress
+  namespace: vault
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: 'ip'
+    alb.ingress.kubernetes.io/load-balancer-name: < LB name >
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/certificate-arn: < YOUR cert ARN >
+    alb.ingress.kubernetes.io/group.name: api-ingress-group
+    alb.ingress.kubernetes.io/subnets: < Your Subnets >
+ 
+spec:
+  ingressClassName: alb
+  rules:
+    - host: xyz.com # your subdomain 
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vault
+                port:
+                  number: 8200
+
+```
+
+<img width="1319" alt="image" src="https://github.com/user-attachments/assets/a5a24338-b5fe-4187-84f6-36f1d027af95" />
