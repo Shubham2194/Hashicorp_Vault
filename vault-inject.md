@@ -47,7 +47,7 @@ vault write auth/kubernetes/role/dev \
 
 <img width="643" alt="image" src="https://github.com/user-attachments/assets/3ccd9768-04af-4f7d-9d84-b10418562969" />
 
-Step 5: No login to Vault UI and check policy and roles created and bounded.
+Step 5: Now login to Vault UI and check policy and roles created and bounded.
 
 <img width="1154" alt="image" src="https://github.com/user-attachments/assets/34e59e0b-804b-4797-935a-2d475bf2c758" />
 
@@ -85,6 +85,20 @@ spec:
       containers:
         - name: app
           image: busybox
-          command: ["/bin/sh"]
-          args: ["-c", "sleep 3600"]
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Sourcing secrets from /vault/secrets/secrets.env";
+              . /vault/secrets/secrets.env && python3 app/main.py #incase you are also deploying python api 
+          resources: {}
+      imagePullSecrets:
+        - name: pvt-image-secret
 ```
+Step 6: Check if we have path exist in the vault container
+
+```
+kubectl exec -n backend <pod>  -c vault-agent -- cat /vault/secrets/secrets.env
+```
+
+Here we go , Finally able to fetch secrets from Vault and Inject them in pod.
+
