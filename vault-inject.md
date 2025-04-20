@@ -71,9 +71,9 @@ spec:
       annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "dev"
-        vault.hashicorp.com/agent-inject-secret-secrets.env: "dev/data/token"
+        vault.hashicorp.com/agent-inject-secret-secrets.env: "dev/data/secret"
         vault.hashicorp.com/agent-inject-template-secrets.env: |
-        {{- with secret "dev/data/token" -}}
+        {{- with secret "dev/data/secret" -}}
         {{- range $k, $v := .Data.data }}
         {{ $k }}={{ $v }}
         {{- end }}
