@@ -1,5 +1,9 @@
 ## 📄 Additional Guides
 
+
+<img width="1159" alt="image" src="https://github.com/user-attachments/assets/bec4c6c9-8247-4bbb-9ea5-c63444b1165a" />
+
+
 - [Vault Agent Injector Setup]
 
 
