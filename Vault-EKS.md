@@ -59,8 +59,10 @@ kubectl get pvc,pods -n vault
 <img width="1254" alt="image" src="https://github.com/user-attachments/assets/133da5de-4fc8-47c7-90f5-4eea79d015cc" />
 
 Step 4:
+Switch namespace to vault 
 
 ```
+kubectl config set-context --current --namespace=vault 
 kubectl exec vault-0 -- vault status
 ```
 <img width="812" alt="image" src="https://github.com/user-attachments/assets/e2d3cb0b-3dc2-45f5-a6d9-a8ee740a2a87" />
