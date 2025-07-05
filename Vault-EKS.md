@@ -44,6 +44,8 @@ Step 3:
 Install Vault helm chart and check if we have PVC and Vault pod running.
 
 ```
+helm repo add hashicorp https://helm.releases.hashicorp.com
+helm search repo hashicorp/vault
 helm install vault hashicorp/vault \
     --set='server.ha.enabled=true' \
     --set='server.ha.raft.enabled=true'
