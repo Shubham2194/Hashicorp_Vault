@@ -54,6 +54,10 @@ Step 5. Vault Kubernetes Auth Role.
 
 Bind the Vault policy to the service account:
 ```
+vault auth enable kubernetes
+```
+
+```
 vault write auth/kubernetes/role/dev \
     bound_service_account_names=dev \
     bound_service_account_namespaces=backend \
