@@ -29,7 +29,7 @@ vault login <root token>
 Step 3: Enbale/Create kv path.
 
 ```
-vault secrets enable -path=dev kv 
+vault secrets enable -path=dev kv-v2 
 ```
 (this will create a custom path which is key value and the name will be dev, cubbyhole/ is default)
 
